@@ -1,2 +1,2 @@
-# extension_ALMAFRIGO
-Extensiones para operaciones internas de ALMAFRIGO
+# ALMAFRIGO
+Permisos necesarios para ALMAFRIGO operaciones
