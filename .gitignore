@@ -1,1 +1,5 @@
 *.ini
+*.zip
+**/*.js.map
+**/*.js
+node_modules/
