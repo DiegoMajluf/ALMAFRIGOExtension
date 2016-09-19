@@ -1,6 +1,10 @@
 {
   "name": "almafrigo",
   "version": "1.2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/DiegoMajluf/ALMAFRIGO.git"
+  },
   "scripts": {
     "start": "npm run copyscripts tsc && concurrently \"npm run tsc:w\" \"npm run lite\" ",
     "lite": "lite-server",
