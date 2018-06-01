@@ -46,13 +46,7 @@ function readBalanza(ip: string, modelo: string, tabId: number) {
         }
         chrome.tabs.sendMessage(tabId, { op: 'lecturaBalanza', value: { peso, unidad } })
     }
-    xhr.onerror = err => {
-        console.error('error', err)
-        chrome.tabs.sendMessage(tabId, { op: 'lecturaBalanzaError', error: err });
-    }
-    xhr.onload = () => {
-        console.log("finalizó la lectura de la balanza")
-        chrome.tabs.sendMessage(tabId, { op: 'lecturaBalanzaComplete' });
-    }
+    xhr.onerror = err => chrome.tabs.sendMessage(tabId, { op: 'lecturaBalanzaError', error: err })
+    xhr.onload = () => chrome.tabs.sendMessage(tabId, { op: 'lecturaBalanzaComplete' })
     xhr.send();
 }
