@@ -1,30 +1,37 @@
 {
 	"manifest_version": 2,
-
 	"name": "ALMAFRIGO",
 	"description": "Operaciones Internas de ALMAFRIGO",
-	"version": "1.2.0",
+	"version": "1.2.1",
+	"author": "ALMAFRIGO",
 	"icons": {
 		"128": "iconos/IconoAlmafrigo128.png",
 		"48": "iconos/IconoAlmafrigo48.png",
 		"16": "iconos/IconoAlmafrigo16.png"
 	},
 	"page_action": {
-          "default_icon": {                    
-            "38": "iconos/IconoAlmafrigo38.png"            
-          }
+		"default_icon": {
+			"38": "iconos/IconoAlmafrigo38.png"
+		}
 	},
 	"background": {
-		"scripts": ["background.js"]
+		"scripts": [
+			"background.js"
+		]
 	},
+	"content_scripts": [
+		{
+			"matches": [
+				"https://www.almafrigo.cl/operaciones.aspx*"
+			],
+			"js": [
+				"content_operaciones.js"
+			]
+		}
+	],
 	"permissions": [
 		"tabs",
-		"http://192.168.0.120:4001/",
-		"http://190.121.1.130:8002/",
-		"http://localhost:51346/",
-		"http://www.almafrigo.cl/*",
-		"http://www.sii.cl/*",
-		"https://www.google.com/cloudprint/*",
+		"<all_urls>",
 		"webRequest",
 		"webRequestBlocking"
 	]

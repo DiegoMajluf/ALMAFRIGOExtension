@@ -4,3 +4,5 @@
 **/*.js
 node_modules/
 typings/
+dist/
+dist_edge/
