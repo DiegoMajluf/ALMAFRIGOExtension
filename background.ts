@@ -19,7 +19,7 @@ chrome.webRequest.onHeadersReceived.addListener(function (details) {
 chrome.runtime.onMessage.addListener((msg: { op: string, value: any }, sender, response) => {
     switch (msg.op) {
         case 'iniciarLecturaBalanza':
-            readBalanza('http://192.168.8.2:4001', 'TCS-K', sender.tab.id)
+            readBalanza(msg.value.ip, msg.value.model, sender.tab.id)
             break;
         case 'finalizarLecturaBalanza':
             xhr.abort()
@@ -32,21 +32,48 @@ function readBalanza(ip: string, modelo: string, tabId: number) {
     xhr = new XMLHttpRequest()
     xhr.open('GET', ip, true);
     xhr.onprogress = () => {
-        var last = new Date();
-        var peso;
-        var unidad;
-        if (xhr.responseText.length < 20) return;
-        switch (modelo) {
-            case 'TCS-K':
-                var txt = xhr.responseText.slice(-50, -1).split('\n=');
-                var str = txt.slice(-2, -1)[0];
-                peso = parseFloat(str.substr(0, 7));
-                unidad = str.substr(8, 2);
-                break;
-        }
-        chrome.tabs.sendMessage(tabId, { op: 'lecturaBalanza', value: { peso, unidad } })
+        let val = balanzas[modelo](xhr.responseText)
+        if(val == null) return
+        chrome.tabs.sendMessage(tabId, { op: 'lecturaBalanza', value: val })
     }
     xhr.onerror = err => chrome.tabs.sendMessage(tabId, { op: 'lecturaBalanzaError', error: err })
     xhr.onload = () => chrome.tabs.sendMessage(tabId, { op: 'lecturaBalanzaComplete' })
     xhr.send();
+}
+
+
+
+
+
+let balanzas: {[model: string]: (t: string) => any} = {
+    'TCS-K': (t: string) => {
+        if (xhr.responseText.length < 20) return;
+        let txt = t.slice(-50, -1).split('\n=');
+        let str = txt.slice(-2, -1)[0];
+        try {
+            return {
+                peso: parseFloat(str.substr(0, 7)),
+                unidad: str.substr(8, 2)
+            }
+        } catch (e) {
+            return
+        }
+    },
+    'GS-JZC': (t: string) => {
+        if (t = '') return;
+        if (t.toUpperCase().indexOf(' G') == -1) return;
+
+        var list = t.toUpperCase().split(' G');   //sacar una lectura
+        if(list!=null)
+            if (list.length > 3) {
+                var s = list[list.length - 2].replace(/\s/g, '')
+                var i = s.indexOf('GS,') // verificar que la lectura es ok
+                return {
+                    peso: parseFloat(s.substring(i+3)),
+                    unidad: 'g',
+                    estable: s.indexOf('ST') != -1
+                }
+            }
+
+    }
 }

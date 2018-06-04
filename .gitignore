@@ -6,3 +6,4 @@ node_modules/
 typings/
 dist/
 dist_edge/
+edge_package/
