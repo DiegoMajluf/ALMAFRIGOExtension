@@ -16,4 +16,5 @@ document.addEventListener('iniciarLecturaBalanza', (e: CustomEvent<{ ip: string,
 })
 document.addEventListener('finalizarLecturaBalanza', () => chrome.runtime.sendMessage({ op: 'finalizarLecturaBalanza' }))
 
+window.onbeforeunload = () => chrome.runtime.sendMessage({ op: 'finalizarLecturaBalanza' })
 
