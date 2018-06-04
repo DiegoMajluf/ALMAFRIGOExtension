@@ -1,8 +1,6 @@
-
-if (!chrome) eval(` var chrome = browser; `)
-
 chrome.runtime.onMessage.addListener((msg: { op: string, value: any, complete: boolean, error: any }, sender, response) => {
-    document.dispatchEvent(new CustomEvent(msg.op, { detail: { value: msg.value, error: msg.error } }))
+    window.postMessage(msg, "*")
+      //  document.dispatchEvent(new CustomEvent(msg.op, { detail: { value: msg.value, error: msg.error } }))
 })
 
 

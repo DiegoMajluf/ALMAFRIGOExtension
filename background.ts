@@ -1,5 +1,3 @@
-if (!chrome) eval(` var chrome = browser; `)
-
 chrome.webRequest.onHeadersReceived.addListener(function (details) {
     details.responseHeaders.push({ name: "Access-Control-Allow-Credentials", value: "true" });
     details.responseHeaders.push({ name: "Access-Control-Allow-Headers", value: "Authorization, Content-type" });
