@@ -11,7 +11,7 @@ chrome.webRequest.onHeadersReceived.addListener(function (details) {
 
 }, {
         urls: ["http://www.sii.cl/*", "https://www.google.com/cloudprint/*"]
-    }, ['blocking', "responseHeaders"]);
+    }, ['blocking', "responseHeaders", "extraHeaders"]);
 
 
 chrome.runtime.onMessage.addListener((msg: { op: string, value: any }, sender, response) => {
