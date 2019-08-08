@@ -8,7 +8,7 @@
   "scripts": {
     "copy": "xcopy /s /y dist\\* dist_edge\\",
     "start": "webpack --mode=development && npm run copy",
-    "prod": "webpack --mode=production --devtools=false && npm run copy"
+    "build": "webpack --mode=production --devtools=false && npm run copy"
   },
   "license": "ISC",
   "devDependencies": {

@@ -20,10 +20,59 @@ chrome.runtime.onMessage.addListener((msg: { op: string, value: any }, sender, r
             readBalanza(msg.value.ip, msg.value.model, sender.tab.id)
             break;
         case 'finalizarLecturaBalanza':
-            xhr.abort()
+            xhr && xhr.abort()
             break;
     }
 })
+
+
+chrome.runtime.onMessageExternal.addListener((msg, sender, sendResponse) => {
+    switch (msg.op) {
+        case 'printDocs':
+            printDocs(msg.value, sender.tab.id)
+                .then(resp => sendResponse(resp))
+            return true;
+    }
+});
+
+interface gpRequestData {
+    titulo: string
+    jobid: string
+    ticket: string,
+    printerId: string
+    token: string
+    base64Content: string
+}
+
+function printDocs(req: gpRequestData, tabId: number) {
+    console.log(req)
+    return fetch(req.base64Content)
+        .then(res => res.blob())
+        .then(b => {
+            let q = new FormData();
+            q.append('xsrf', req.token);
+            q.append('printerid', req.printerId);
+            q.append('jobid', req.jobid || '');
+            q.append('title', req.titulo);
+            q.append('contentType', b.type);
+            q.append('ticket', req.ticket);
+            q.append('content', b)
+            return q
+        })
+        .then(body => fetch('https://www.google.com/cloudprint/submit', {
+            method: 'POST',
+            headers: [['Authorization', 'Bearer ' + req.token]],
+            body
+        }))
+        .then(res => res.json())
+        .then(json => ({ status: 'OK', response: json }))
+        .catch(err => ({ status: 'ERROR', response: err }))
+
+
+
+}
+
+
 
 let xhr: XMLHttpRequest;
 function readBalanza(ip: string, modelo: string, tabId: number) {
@@ -31,7 +80,7 @@ function readBalanza(ip: string, modelo: string, tabId: number) {
     xhr.open('GET', ip, true);
     xhr.onprogress = () => {
         let val = balanzas[modelo](xhr.responseText)
-        if(val == null) return
+        if (val == null) return
         chrome.tabs.sendMessage(tabId, { op: 'lecturaBalanza', value: val })
     }
     xhr.onerror = err => chrome.tabs.sendMessage(tabId, { op: 'lecturaBalanzaError', error: err })
@@ -43,7 +92,7 @@ function readBalanza(ip: string, modelo: string, tabId: number) {
 
 
 
-let balanzas: {[model: string]: (t: string) => any} = {
+let balanzas: { [model: string]: (t: string) => any } = {
     'TCS-K': (t: string) => {
         if (xhr.responseText.length < 20) return;
         let txt = t.slice(-50, -1).split('\n=');
@@ -62,12 +111,12 @@ let balanzas: {[model: string]: (t: string) => any} = {
         if (t.toUpperCase().indexOf(' G') == -1) return;
 
         var list = t.toUpperCase().split(' G');   //sacar una lectura
-        if(list!=null)
+        if (list != null)
             if (list.length > 3) {
                 var s = list[list.length - 2].replace(/\s/g, '')
                 var i = s.indexOf('GS,') // verificar que la lectura es ok
                 return {
-                    peso: parseFloat(s.substring(i+3)),
+                    peso: parseFloat(s.substring(i + 3)),
                     unidad: 'g',
                     estable: s.indexOf('ST') != -1
                 }
