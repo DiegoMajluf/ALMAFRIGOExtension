@@ -45,7 +45,7 @@ interface gpRequestData {
 }
 
 function printDocs(req: gpRequestData, tabId: number) {
-    console.log(req)
+
     return fetch(req.base64Content)
         .then(res => res.blob())
         .then(b => {
@@ -67,8 +67,6 @@ function printDocs(req: gpRequestData, tabId: number) {
         .then(res => res.json())
         .then(json => ({ status: 'OK', response: json }))
         .catch(err => ({ status: 'ERROR', response: err }))
-
-
 
 }
 

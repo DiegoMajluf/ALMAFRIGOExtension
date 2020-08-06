@@ -1,7 +1,7 @@
 const path = require('path');
 const webpack = require('webpack');
 const CopyWebpackPlugin = require('copy-webpack-plugin')
-const CleanWebpackPlugin = require('clean-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 let _root = path.resolve(__dirname, '.');
 
@@ -17,15 +17,15 @@ module.exports = {
         content_operaciones: './content_operaciones.ts'
     },
 
-    devtool: 'source-map',
+    //devtool: 'source-map',
     mode: 'development',
-  
+
 
     devServer: {
-      historyApiFallback: true,
-      stats: 'minimal'
+        historyApiFallback: true,
+        stats: 'minimal'
     },
-    
+
     resolve: {
         extensions: ['.ts', '.js']
     },
@@ -42,11 +42,11 @@ module.exports = {
             }
         ]
     },
-     plugins: [
-        new CleanWebpackPlugin(["dist", "dist_edge"]),
-        new CopyWebpackPlugin([
-             'manifest.json', 'iconos/**.*'
-         ]),
+    plugins: [
+        new CleanWebpackPlugin({cleanOnceBeforeBuildPatterns: ["dist", "dist_edge"]}),
+        new CopyWebpackPlugin({patterns: [
+            'manifest.json', 'iconos/**.*'
+        ]}),
 
-       ]
+    ]
 }

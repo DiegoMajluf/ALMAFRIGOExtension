@@ -2,7 +2,7 @@
 	"manifest_version": 2,
 	"name": "ALMAFRIGO",
 	"description": "Operaciones Internas de ALMAFRIGO",
-	"version": "1.4.0",
+	"version": "1.4.1",
 	"author": "ALMAFRIGO",
 	"icons": {
 		"128": "iconos/IconoAlmafrigo128.png",
