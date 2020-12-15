@@ -7,20 +7,12 @@
   },
   "scripts": {
     "copy": "xcopy /s /y dist\\* dist_edge\\",
-    "copyfiles": "xcopy /y manifest.json dist\\",
-    "start": "webpack --mode=\"development\" && npm run copy",
-    "build": "webpack --mode='production' --devtools= && npm run copy",
+    "copyfiles": "xcopy /y manifest.json dist\\ && xcopy /s /y /i iconos\\* dist\\iconos",
     "buildfire": "tsc && npm run copyfiles"
   },
   "license": "ISC",
   "devDependencies": {
-    "@types/chrome": "0.0.122",
-    "clean-webpack-plugin": "^3.0.0",
-    "copy-webpack-plugin": "^6.0.3",
-    "ts-loader": "^8.0.2",
-    "typescript": "^3.9.7",
-    "webpack": "^4.44.1",
-    "webpack-cli": "^3.3.12"
+    "@types/chrome": "0.0.122"
   },
   "dependencies": {}
 }
