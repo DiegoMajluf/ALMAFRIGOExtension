@@ -2,7 +2,7 @@
 	"manifest_version": 2,
 	"name": "ALMAFRIGO",
 	"description": "Operaciones Internas de ALMAFRIGO",
-	"version": "1.4.1",
+	"version": "1.4.4",
 	"author": "ALMAFRIGO",
 	"icons": {
 		"128": "iconos/IconoAlmafrigo128.png",
@@ -32,12 +32,7 @@
 	"permissions": [
 		"tabs",
 		"webRequest",
-		"webRequestBlocking",
 		"*://www.almafrigo.cl/*",
-		"https://www.google.com/cloudprint/*"
-		
-	],
-	"externally_connectable": {
-		"matches": ["*://www.almafrigo.cl/operaciones.aspx*", "http://localhost:51346/operaciones.aspx*"]
-	  }
+		"http://192.168.8.2/*"		
+	]
 }

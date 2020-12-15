@@ -7,8 +7,10 @@
   },
   "scripts": {
     "copy": "xcopy /s /y dist\\* dist_edge\\",
+    "copyfiles": "xcopy /y manifest.json dist\\",
     "start": "webpack --mode=\"development\" && npm run copy",
-    "build": "webpack --mode='production' --devtools= && npm run copy"
+    "build": "webpack --mode='production' --devtools= && npm run copy",
+    "buildfire": "tsc && npm run copyfiles"
   },
   "license": "ISC",
   "devDependencies": {
